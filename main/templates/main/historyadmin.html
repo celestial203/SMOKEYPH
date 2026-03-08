@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction History - Smokey Peeks Admin</title>
+    <link rel="stylesheet" href="{% static 'main/css/adminpage.css' %}" />
+    <link rel="stylesheet" href="{% static 'main/css/historyadmin.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <div class="admin-brand-wrap">
+          <a href="{% url 'main:home' %}" class="admin-brand" aria-label="Smokey Peeks – Back to home">
+            <img
+              src="{% static 'main/img/logo no bg.png' %}"
+              alt="Smokey Peeks logo"
+              class="admin-brand-logo"
+            />
+            <span class="admin-brand-text">
+              <span class="admin-brand-name">Smokey Peeks</span>
+              <span class="admin-brand-tagline">Smoke, Sizzle, and Sip the Night Away.</span>
+            </span>
+          </a>
+          <div class="admin-greeting-row">
+            <div class="admin-greeting">
+              <span class="admin-greeting-icon" aria-hidden="true">👋</span>
+              <span class="admin-greeting-text">Hello Admin</span>
+            </div>
+            <a href="{% url 'main:admin' %}" class="admin-history-link">Dashboard</a>
+          </div>
+          <div id="admin-datetime" class="admin-datetime" aria-live="polite"></div>
+        </div>
+        <a href="{% url 'main:admin_logout' %}" class="admin-logout-link" title="Log out">
+          <svg class="admin-logout-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Log out</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="history-main">
+      <h1 class="history-title">Transaction History</h1>
+      <p class="history-subtitle">All admin actions on reservations</p>
+
+      <section class="history-card">
+        <div class="history-table-wrapper">
+          <table class="history-table" role="grid">
+            <thead>
+              <tr>
+                <th>Date &amp; Time</th>
+                <th>Action</th>
+                <th>Reservation</th>
+                <th>Details</th>
+                <th>Admin</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for act in activities %}
+              <tr>
+                <td>{{ act.created_at|date:"M j, Y" }} {{ act.created_at|time:"g:i A" }}</td>
+                <td><span class="history-badge history-badge-{{ act.action }}">{{ act.get_action_display }}</span></td>
+                <td>{{ act.reservation_name }}</td>
+                <td>{{ act.details }}</td>
+                <td>{{ act.admin_user.username|default:"—" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="history-empty">No admin activity recorded yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var el = document.getElementById("admin-datetime");
+        if (!el) return;
+        function update() {
+          var now = new Date();
+          el.textContent = now.toLocaleString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+        }
+        update();
+        setInterval(update, 1000);
+      })();
+    </script>
+  </body>
+</html>

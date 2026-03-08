@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - Smokey Peeks</title>
+    <link rel="stylesheet" href="logadmin.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <a href="homepage.html" class="admin-brand" aria-label="Smokey Peeks – Back to home">
+          <img
+            src="img/logo no bg.png"
+            alt="Smokey Peeks logo"
+            class="admin-brand-logo"
+          />
+          <span class="admin-brand-text">
+            <span class="admin-brand-name">Smokey Peeks</span>
+            <span class="admin-brand-tagline">Smoke, Sizzle, and Sip the Night Away.</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="admin-login-wrapper">
+        <section class="admin-login-card" aria-labelledby="admin-login-title">
+          <h1 id="admin-login-title" class="admin-login-title">Admin Login</h1>
+          <p class="admin-login-subtitle">Sign in to manage Smokey Peeks</p>
+
+          <form class="admin-login-form" action="#" method="post" autocomplete="on">
+            <div class="admin-form-group">
+              <label for="admin-username" class="admin-label">Username</label>
+              <input
+                type="text"
+                id="admin-username"
+                name="username"
+                class="admin-input"
+                placeholder="Enter username"
+                autocomplete="username"
+                required
+              />
+            </div>
+            <div class="admin-form-group">
+              <label for="admin-password" class="admin-label">Password</label>
+              <input
+                type="password"
+                id="admin-password"
+                name="password"
+                class="admin-input"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+            <button type="submit" class="admin-btn">Sign In</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer class="admin-footer">
+      <p class="admin-footer-text">&copy; Smokey Peeks. Admin access only.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Smokey Peeks</title>
+    <link rel="stylesheet" href="adminpage.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <a href="homepage.html" class="admin-brand" aria-label="Smokey Peeks – Back to home">
+          <img
+            src="img/logo no bg.png"
+            alt="Smokey Peeks logo"
+            class="admin-brand-logo"
+          />
+          <span class="admin-brand-text">
+            <span class="admin-brand-name">Smokey Peeks</span>
+            <span class="admin-brand-tagline">Smoke, Sizzle, and Sip the Night Away.</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="admin-dashboard">
+      <h1 class="admin-dashboard-title">Admin Dashboard</h1>
+
+      <section class="admin-card admin-card-today" aria-labelledby="today-heading">
+        <h2 id="today-heading" class="admin-card-title">Total Reservations Today</h2>
+        <div class="admin-today-grid">
+          <div class="admin-today-summary">
+            <span class="admin-today-number" aria-live="polite">4</span>
+            <p class="admin-today-label">Total Reservations Today</p>
+            <a href="#all-reservations" class="admin-btn admin-btn-secondary">View All Reservations &gt;</a>
+          </div>
+          <div class="admin-upcoming">
+            <h3 class="admin-upcoming-title">Upcoming Reservations</h3>
+            <div class="admin-table-wrapper">
+              <table class="admin-table" role="grid">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Guests</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Maria</td>
+                    <td>09xxx</td>
+                    <td>4</td>
+                    <td class="admin-upcoming-date" data-reservation-date="Mar 7, 2025">Mar 7, 2025</td>
+                    <td><span class="admin-status admin-status-confirmed">Confirmed</span></td>
+                  </tr>
+                  <tr>
+                    <td>John</td>
+                    <td>09xxx</td>
+                    <td>2</td>
+                    <td class="admin-upcoming-date" data-reservation-date="Mar 7, 2025">Mar 7, 2025</td>
+                    <td><span class="admin-status admin-status-pending">Pending</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-card admin-card-all" id="all-reservations" aria-labelledby="all-heading">
+        <h2 id="all-heading" class="admin-card-title">All Reservations</h2>
+        <div class="admin-toolbar">
+          <label for="admin-search" class="admin-search-wrap">
+            <span class="admin-search-icon" aria-hidden="true">&#128269;</span>
+            <input type="search" id="admin-search" class="admin-search-input" placeholder="Search name, phone…" autocomplete="off" />
+          </label>
+          <div class="admin-filters">
+            <div class="admin-filter-dropdown">
+              <button type="button" class="admin-filter-btn" aria-haspopup="true" aria-expanded="false" data-filter="status">Status &#9662;</button>
+              <div class="admin-filter-menu" role="menu" hidden>
+                <button type="button" role="menuitem" data-value="">All</button>
+                <button type="button" role="menuitem" data-value="pending">Pending</button>
+                <button type="button" role="menuitem" data-value="completed">Completed</button>
+                <button type="button" role="menuitem" data-value="cancelled">Cancelled</button>
+              </div>
+            </div>
+            <div class="admin-filter-dropdown">
+              <button type="button" class="admin-filter-btn" aria-haspopup="true" aria-expanded="false" data-filter="guests">Guests &#9662;</button>
+              <div class="admin-filter-menu" role="menu" hidden>
+                <button type="button" role="menuitem" data-value="">All</button>
+                <button type="button" role="menuitem" data-value="1">1</button>
+                <button type="button" role="menuitem" data-value="2">2</button>
+                <button type="button" role="menuitem" data-value="3">3</button>
+                <button type="button" role="menuitem" data-value="4">4+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-table-wrapper admin-table-wrapper-full">
+          <table class="admin-table admin-table-full" role="grid">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Guests</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody id="admin-reservations-tbody">
+              <tr data-guests="4" data-status="">
+                <td>Maria</td>
+                <td>09xxx</td>
+                <td>4</td>
+                <td>Mar 7, 2025</td>
+                <td>7pm</td>
+                <td class="admin-status-cell"></td>
+                <td>
+                  <button type="button" class="admin-edit-row-btn" aria-label="Edit reservation">Edit</button>
+                </td>
+              </tr>
+              <tr data-guests="2" data-status="">
+                <td>John</td>
+                <td>09xxx</td>
+                <td>2</td>
+                <td>Mar 7, 2025</td>
+                <td>8pm</td>
+                <td class="admin-status-cell"></td>
+                <td>
+                  <button type="button" class="admin-edit-row-btn" aria-label="Edit reservation">Edit</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Edit reservation modal -->
+      <div id="admin-edit-modal" class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-edit-modal-title" hidden>
+        <div class="admin-modal-backdrop"></div>
+        <div class="admin-modal-box">
+          <h2 id="admin-edit-modal-title" class="admin-modal-title">Edit reservation</h2>
+          <form id="admin-edit-form" class="admin-edit-form">
+            <div class="admin-edit-field">
+              <label for="admin-edit-name">Name</label>
+              <input type="text" id="admin-edit-name" name="name" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-phone">Phone</label>
+              <input type="text" id="admin-edit-phone" name="phone" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-guests">Guests</label>
+              <input type="number" id="admin-edit-guests" name="guests" class="admin-edit-input" min="1" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-date">Date</label>
+              <input type="text" id="admin-edit-date" name="date" class="admin-edit-input" placeholder="e.g. Mar 7, 2025" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-time">Time</label>
+              <input type="text" id="admin-edit-time" name="time" class="admin-edit-input" placeholder="e.g. 7pm" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-status">Status</label>
+              <select id="admin-edit-status" name="status" class="admin-edit-select">
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="admin-modal-actions">
+              <button type="button" class="admin-btn admin-btn-secondary admin-modal-cancel">Cancel</button>
+              <button type="submit" class="admin-btn admin-btn-add">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <script>
+      (function () {
+        var cells = document.querySelectorAll(".admin-upcoming-date");
+        cells.forEach(function (cell) {
+          var dateStr = cell.getAttribute("data-reservation-date") || cell.textContent;
+          if (!dateStr) return;
+          var d = new Date(dateStr.trim());
+          if (isNaN(d.getTime())) return;
+          d.setDate(d.getDate() - 1);
+          cell.textContent = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        });
+      })();
+
+      (function () {
+        var modal = document.getElementById("admin-edit-modal");
+        var form = document.getElementById("admin-edit-form");
+        var backdrop = modal && modal.querySelector(".admin-modal-backdrop");
+        var cancelBtn = modal && modal.querySelector(".admin-modal-cancel");
+        var currentRow = null;
+
+        function getRowStatus(row) {
+          var statusCell = row.querySelector(".admin-status-cell");
+          if (!statusCell) return "";
+          var span = statusCell.querySelector(".admin-status");
+          if (!span) return "";
+          var m = span.className.match(/admin-status-(\w+)/);
+          return m ? m[1] : "";
+        }
+
+        function openEditModal(row) {
+          if (!modal || !form) return;
+          currentRow = row;
+          form.elements["name"].value = (row.cells[0] && row.cells[0].textContent) || "";
+          form.elements["phone"].value = (row.cells[1] && row.cells[1].textContent) || "";
+          form.elements["guests"].value = (row.cells[2] && row.cells[2].textContent) || "";
+          form.elements["date"].value = (row.cells[3] && row.cells[3].textContent) || "";
+          form.elements["time"].value = (row.cells[4] && row.cells[4].textContent) || "";
+          form.elements["status"].value = row.getAttribute("data-status") || getRowStatus(row) || "pending";
+          modal.removeAttribute("hidden");
+        }
+
+        function closeEditModal() {
+          if (modal) modal.setAttribute("hidden", "");
+          currentRow = null;
+        }
+
+        function saveFromForm() {
+          if (!currentRow) return;
+          var name = form.elements["name"].value.trim();
+          var phone = form.elements["phone"].value.trim();
+          var guests = form.elements["guests"].value.trim();
+          var date = form.elements["date"].value.trim();
+          var time = form.elements["time"].value.trim();
+          var status = form.elements["status"].value;
+          currentRow.cells[0].textContent = name;
+          currentRow.cells[1].textContent = phone;
+          currentRow.cells[2].textContent = guests;
+          currentRow.cells[3].textContent = date;
+          currentRow.cells[4].textContent = time;
+          currentRow.setAttribute("data-guests", guests);
+          currentRow.setAttribute("data-status", status);
+          var statusCell = currentRow.querySelector(".admin-status-cell");
+          if (statusCell) {
+            var label = status.charAt(0).toUpperCase() + status.slice(1);
+            statusCell.innerHTML = "<span class=\"admin-status admin-status-" + status + "\">" + label + "</span>";
+          }
+          if (typeof window.applyReservationFilters === "function") window.applyReservationFilters();
+          if (typeof window.sortReservationsByDate === "function") window.sortReservationsByDate();
+          closeEditModal();
+        }
+
+        document.querySelectorAll(".admin-edit-row-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var row = btn.closest("tr");
+            if (row) openEditModal(row);
+          });
+        });
+
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            saveFromForm();
+          });
+        }
+        if (backdrop) backdrop.addEventListener("click", closeEditModal);
+        if (cancelBtn) cancelBtn.addEventListener("click", closeEditModal);
+      })();
+
+      (function () {
+        var searchInput = document.getElementById("admin-search");
+        var tbody = document.getElementById("admin-reservations-tbody");
+        if (!searchInput || !tbody) return;
+
+        var filterStatus = "";
+        var filterGuests = "";
+
+        function parseTimeToMinutes(timeStr) {
+          if (!timeStr || !timeStr.trim()) return 0;
+          var t = timeStr.trim().toLowerCase();
+          var m = t.match(/^(\d{1,2})\s*(am|pm)?$/);
+          if (!m) return 0;
+          var hour = parseInt(m[1], 10);
+          var ampm = (m[2] || "").toLowerCase();
+          if (ampm === "pm" && hour !== 12) hour += 12;
+          if (ampm === "am" && hour === 12) hour = 0;
+          return hour * 60;
+        }
+
+        function getRowSortKey(row) {
+          var dateText = (row.cells[3] && row.cells[3].textContent) || "";
+          var timeText = (row.cells[4] && row.cells[4].textContent) || "";
+          var d = dateText.trim() ? new Date(dateText.trim()) : new Date(0);
+          var ts = isNaN(d.getTime()) ? 0 : d.getTime();
+          return ts + parseTimeToMinutes(timeText);
+        }
+
+        function sortReservationsByDate() {
+          var rows = Array.from(tbody.querySelectorAll("tr"));
+          rows.sort(function (a, b) {
+            var statusA = a.getAttribute("data-status") || getRowStatus(a);
+            var statusB = b.getAttribute("data-status") || getRowStatus(b);
+            var completedA = statusA === "completed";
+            var completedB = statusB === "completed";
+            if (completedA !== completedB) return completedA ? 1 : -1;
+            return getRowSortKey(a) - getRowSortKey(b);
+          });
+          rows.forEach(function (row) {
+            tbody.appendChild(row);
+          });
+        }
+
+        sortReservationsByDate();
+
+        function getRowStatus(row) {
+          var statusCell = row.querySelector(".admin-status-cell");
+          if (!statusCell) return "";
+          var span = statusCell.querySelector(".admin-status");
+          if (!span) return "";
+          var m = span.className.match(/admin-status-(\w+)/);
+          return m ? m[1] : "";
+        }
+
+        function applyFilters() {
+          var q = (searchInput.value || "").trim().toLowerCase();
+          var rows = tbody.querySelectorAll("tr");
+          rows.forEach(function (row) {
+            var name = (row.cells[0] && row.cells[0].textContent) || "";
+            var phone = (row.cells[1] && row.cells[1].textContent) || "";
+            var rowStatus = row.getAttribute("data-status") || getRowStatus(row);
+            var guests = row.getAttribute("data-guests") || (row.cells[2] && row.cells[2].textContent) || "";
+            var searchMatch = !q || name.toLowerCase().indexOf(q) >= 0 || phone.toLowerCase().indexOf(q) >= 0;
+            var statusMatch = !filterStatus || rowStatus === filterStatus;
+            var guestsMatch = !filterGuests || (filterGuests === "4" && parseInt(guests, 10) >= 4) || guests === filterGuests;
+            row.style.display = searchMatch && statusMatch && guestsMatch ? "" : "none";
+          });
+        }
+
+        window.applyReservationFilters = applyFilters;
+        window.sortReservationsByDate = sortReservationsByDate;
+
+        searchInput.addEventListener("input", applyFilters);
+
+        document.querySelectorAll(".admin-filter-dropdown").forEach(function (wrap) {
+          var btn = wrap.querySelector(".admin-filter-btn");
+          var menu = wrap.querySelector(".admin-filter-menu");
+          var filterName = btn.getAttribute("data-filter");
+
+          function updateLabel(value, text) {
+            var label = text || btn.textContent.replace(/\s*&#9662;.*$/, "").trim();
+            if (value) label = text || value;
+            btn.innerHTML = label + " &#9662;";
+          }
+
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var isOpen = !menu.hasAttribute("hidden");
+            document.querySelectorAll(".admin-filter-menu").forEach(function (m) {
+              m.setAttribute("hidden", "");
+            });
+            document.querySelectorAll(".admin-filter-dropdown .admin-filter-btn").forEach(function (b) {
+              b.setAttribute("aria-expanded", "false");
+            });
+            if (!isOpen) {
+              menu.removeAttribute("hidden");
+              btn.setAttribute("aria-expanded", "true");
+              var rect = btn.getBoundingClientRect();
+              menu.style.position = "fixed";
+              menu.style.top = (rect.bottom + 4) + "px";
+              menu.style.left = rect.left + "px";
+            }
+          });
+
+          menu.querySelectorAll("[data-value]").forEach(function (item) {
+            item.addEventListener("click", function (e) {
+              e.stopPropagation();
+              var value = this.getAttribute("data-value");
+              if (filterName === "status") {
+                filterStatus = value;
+                updateLabel(value, value ? value.charAt(0).toUpperCase() + value.slice(1) : "Status");
+              } else if (filterName === "guests") {
+                filterGuests = value;
+                updateLabel(value, value ? (value === "4" ? "4+" : value) : "Guests");
+              }
+              menu.setAttribute("hidden", "");
+              btn.setAttribute("aria-expanded", "false");
+              applyFilters();
+            });
+          });
+        });
+
+        document.addEventListener("click", function () {
+          document.querySelectorAll(".admin-filter-menu").forEach(function (m) {
+            m.setAttribute("hidden", "");
+          });
+          document.querySelectorAll(".admin-filter-dropdown .admin-filter-btn").forEach(function (b) {
+            b.setAttribute("aria-expanded", "false");
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

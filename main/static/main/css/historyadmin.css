@@ -1,0 +1,106 @@
+/* Transaction History page – Smokey Peeks Admin */
+.history-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.history-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.history-subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+  color: #5a5a5a;
+}
+
+.history-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.history-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.history-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.history-table th,
+.history-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.history-table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5a5a5a;
+  background: #f8f9fa;
+}
+
+.history-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.history-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.history-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+}
+
+.history-badge-confirmed {
+  background: rgba(76, 175, 80, 0.2);
+  color: #2e7d32;
+}
+
+.history-badge-edited {
+  background: rgba(33, 150, 243, 0.2);
+  color: #1565c0;
+}
+
+.history-badge-cancelled {
+  background: rgba(244, 67, 54, 0.2);
+  color: #c62828;
+}
+
+.history-empty {
+  color: #5a5a5a;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .history-main {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .history-table th,
+  .history-table td {
+    padding: 0.5rem 0.65rem;
+    font-size: 0.8rem;
+  }
+}

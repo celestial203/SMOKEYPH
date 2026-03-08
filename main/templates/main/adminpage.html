@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Smokey Peeks</title>
+    <link rel="stylesheet" href="{% static 'main/css/adminpage.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <div class="admin-brand-wrap">
+          <a href="{% url 'main:home' %}" class="admin-brand" aria-label="Smokey Peeks – Back to home">
+            <img
+              src="{% static 'main/img/logo no bg.png' %}"
+              alt="Smokey Peeks logo"
+              class="admin-brand-logo"
+            />
+            <span class="admin-brand-text">
+              <span class="admin-brand-name">Smokey Peeks</span>
+              <span class="admin-brand-tagline">Smoke, Sizzle, and Sip the Night Away.</span>
+            </span>
+          </a>
+          <div class="admin-greeting-row">
+            <div class="admin-greeting">
+              <span class="admin-greeting-icon" aria-hidden="true">👋</span>
+              <span class="admin-greeting-text">Hello Admin</span>
+            </div>
+            <a href="{% url 'main:admin_history' %}" class="admin-history-link">Transaction History</a>
+          </div>
+          <div id="admin-datetime" class="admin-datetime" aria-live="polite"></div>
+        </div>
+        <a href="{% url 'main:admin_logout' %}" class="admin-logout-link" title="Log out">
+          <svg class="admin-logout-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Log out</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="admin-dashboard">
+      <h1 class="admin-dashboard-title">Admin Dashboard</h1>
+
+      <section class="admin-card admin-card-today" aria-labelledby="today-heading">
+        <h2 id="today-heading" class="admin-card-title">Total Reservations (Transactions Today)</h2>
+        <div class="admin-today-summary-row">
+          <div class="admin-today-summary">
+            <span id="admin-today-total" class="admin-today-number" aria-live="polite">{{ today_count }}</span>
+            <p class="admin-today-label">Reservations created today</p>
+            <div class="admin-today-chips">
+              <span class="admin-today-chip admin-today-chip-confirmed">
+                <span id="admin-today-confirmed-count">{{ today_confirmed }}</span> Confirmed
+              </span>
+              <span class="admin-today-chip admin-today-chip-pending">
+                <span id="admin-today-pending-count">{{ today_pending }}</span> Pending
+              </span>
+              <span class="admin-today-chip admin-today-chip-cancelled">
+                <span id="admin-today-cancelled-count">{{ today_cancelled }}</span> Cancelled
+              </span>
+            </div>
+            <a href="#all-reservations" class="admin-btn admin-btn-secondary">View All Reservations &gt;</a>
+          </div>
+        </div>
+
+        <div class="admin-recent-boxes">
+          <div class="admin-recent-box" id="admin-upcoming">
+            <h3 class="admin-recent-title">Upcoming Reservations</h3>
+            <div class="admin-table-wrapper">
+              <table class="admin-table admin-recent-table" role="grid">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Guests</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-upcoming-tbody">
+                  <tr><td colspan="6" class="admin-recent-loading">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="admin-recent-box" id="admin-recent-confirmed">
+            <h3 class="admin-recent-title">Recent Confirmed Reservations</h3>
+            <div class="admin-table-wrapper">
+              <table class="admin-table admin-recent-table" role="grid">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Guests</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-recent-confirmed-tbody">
+                  <tr><td colspan="6" class="admin-recent-loading">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="admin-recent-box" id="admin-recent-pending">
+            <h3 class="admin-recent-title">Pending Reservations</h3>
+            <div class="admin-table-wrapper">
+              <table class="admin-table admin-recent-table" role="grid">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Guests</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-recent-pending-tbody">
+                  <tr><td colspan="6" class="admin-recent-loading">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="admin-recent-box" id="admin-recent-cancelled">
+            <h3 class="admin-recent-title">Recent Cancelled Reservations</h3>
+            <div class="admin-table-wrapper">
+              <table class="admin-table admin-recent-table" role="grid">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Guests</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-recent-cancelled-tbody">
+                  <tr><td colspan="6" class="admin-recent-loading">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-card admin-card-all" id="all-reservations" aria-labelledby="all-heading">
+        <h2 id="all-heading" class="admin-card-title">All Reservations</h2>
+        <div class="admin-toolbar">
+          <label for="admin-search" class="admin-search-wrap">
+            <span class="admin-search-icon" aria-hidden="true">&#128269;</span>
+            <input type="search" id="admin-search" class="admin-search-input" placeholder="Search name, phone…" autocomplete="off" />
+          </label>
+          <div class="admin-filters">
+            <div class="admin-filter-dropdown">
+              <button type="button" class="admin-filter-btn" aria-haspopup="true" aria-expanded="false" data-filter="status">Status &#9662;</button>
+              <div class="admin-filter-menu" role="menu" hidden>
+                <button type="button" role="menuitem" data-value="">All</button>
+                <button type="button" role="menuitem" data-value="pending">Pending</button>
+                <button type="button" role="menuitem" data-value="confirmed">Confirmed</button>
+                <button type="button" role="menuitem" data-value="cancelled">Cancelled</button>
+              </div>
+            </div>
+            <div class="admin-filter-dropdown">
+              <button type="button" class="admin-filter-btn" aria-haspopup="true" aria-expanded="false" data-filter="guests">Guests &#9662;</button>
+              <div class="admin-filter-menu" role="menu" hidden>
+                <button type="button" role="menuitem" data-value="">All</button>
+                <button type="button" role="menuitem" data-value="1">1</button>
+                <button type="button" role="menuitem" data-value="2">2</button>
+                <button type="button" role="menuitem" data-value="3">3</button>
+                <button type="button" role="menuitem" data-value="4">4+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-table-wrapper admin-table-wrapper-full">
+          <table class="admin-table admin-table-full" role="grid">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Guests</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-reservations-tbody">
+              {% for res in reservations %}
+              <tr data-id="{{ res.id }}" data-guests="{{ res.guests }}" data-status="{{ res.status }}" data-date="{{ res.date|date:'Y-m-d' }}" data-time="{{ res.time|time:'H:i' }}" data-location="{{ res.location }}" data-email="{{ res.email }}">
+                <td>{{ res.name }}</td>
+                <td>{{ res.phone }}</td>
+                <td>{{ res.guests }}</td>
+                <td>{{ res.get_location_display }}</td>
+                <td>{{ res.date|date:"M j, Y" }}</td>
+                <td>{{ res.time|time:"g:i A" }}</td>
+                <td class="admin-status-cell"><span class="admin-status admin-status-{{ res.status }}">{{ res.get_status_display }}</span></td>
+                <td class="admin-actions-cell">
+                  {% if res.status == 'pending' %}
+                  <button type="button" class="admin-confirm-btn" data-id="{{ res.id }}" aria-label="Confirm reservation">Confirm</button>
+                  {% endif %}
+                  <button type="button" class="admin-edit-row-btn" data-id="{{ res.id }}" aria-label="Edit reservation">Edit</button>
+                </td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="8">No reservations yet</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Edit reservation modal -->
+      <div id="admin-edit-modal" class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-edit-modal-title" hidden>
+        <div class="admin-modal-backdrop"></div>
+        <div class="admin-modal-box">
+          <h2 id="admin-edit-modal-title" class="admin-modal-title">Edit reservation</h2>
+          <form id="admin-edit-form" class="admin-edit-form">
+            <input type="hidden" id="admin-edit-id" name="id" value="" />
+            <div class="admin-edit-field">
+              <label for="admin-edit-name">Name</label>
+              <input type="text" id="admin-edit-name" name="name" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-email">Email</label>
+              <input type="email" id="admin-edit-email" name="email" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-phone">Phone</label>
+              <input type="text" id="admin-edit-phone" name="phone" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-location">Location</label>
+              <select id="admin-edit-location" name="location" class="admin-edit-select">
+                <option value="onepav">One Pavilion Mall</option>
+                <option value="ilcorso">Il Corso South Food Park</option>
+              </select>
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-guests">Guests</label>
+              <input type="number" id="admin-edit-guests" name="guests" class="admin-edit-input" min="1" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-date">Date</label>
+              <input type="date" id="admin-edit-date" name="date" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-time">Time</label>
+              <input type="time" id="admin-edit-time" name="time" class="admin-edit-input" required />
+            </div>
+            <div class="admin-edit-field">
+              <label for="admin-edit-status">Status</label>
+              <select id="admin-edit-status" name="status" class="admin-edit-select">
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="admin-modal-actions">
+              <button type="button" class="admin-btn admin-btn-secondary admin-modal-cancel">Cancel</button>
+              <button type="submit" class="admin-btn admin-btn-add">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <script>
+      (function () {
+        var el = document.getElementById("admin-datetime");
+        if (!el) return;
+        function update() {
+          var now = new Date();
+          el.textContent = now.toLocaleString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+        }
+        update();
+        setInterval(update, 1000);
+      })();
+      (function () {
+        var modal = document.getElementById("admin-edit-modal");
+        var form = document.getElementById("admin-edit-form");
+        var backdrop = modal && modal.querySelector(".admin-modal-backdrop");
+        var cancelBtn = modal && modal.querySelector(".admin-modal-cancel");
+        var currentRow = null;
+
+        function getCsrfToken() {
+          var m = document.querySelector("meta[name=csrf-token]");
+          return m ? m.getAttribute("content") : "";
+        }
+
+        function openEditModal(row) {
+          if (!modal || !form) return;
+          currentRow = row;
+          form.elements["id"].value = row.getAttribute("data-id") || "";
+          form.elements["name"].value = (row.cells[0] && row.cells[0].textContent) || "";
+          form.elements["email"].value = row.getAttribute("data-email") || "";
+          form.elements["phone"].value = (row.cells[1] && row.cells[1].textContent) || "";
+          form.elements["location"].value = row.getAttribute("data-location") || "onepav";
+          form.elements["guests"].value = (row.cells[2] && row.cells[2].textContent) || "";
+          form.elements["date"].value = row.getAttribute("data-date") || "";
+          form.elements["time"].value = row.getAttribute("data-time") || "";
+          form.elements["status"].value = row.getAttribute("data-status") || "pending";
+          modal.removeAttribute("hidden");
+        }
+
+        function getLocationDisplay(loc) {
+          return loc === "ilcorso" ? "Il Corso South Food Park" : "One Pavilion Mall";
+        }
+
+        function closeEditModal() {
+          if (modal) modal.setAttribute("hidden", "");
+          currentRow = null;
+        }
+
+        function updateRowFromForm(row) {
+          var name = form.elements["name"].value.trim();
+          var phone = form.elements["phone"].value.trim();
+          var guests = form.elements["guests"].value.trim();
+          var location = form.elements["location"].value;
+          var date = form.elements["date"].value;
+          var time = form.elements["time"].value;
+          var status = form.elements["status"].value;
+          var dateFormatted = date ? new Date(date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
+          var timeFormatted = time ? (function() {
+            var p = time.split(":");
+            var h = parseInt(p[0], 10);
+            var m = parseInt(p[1] || 0, 10);
+            var ampm = h >= 12 ? "PM" : "AM";
+            h = h % 12 || 12;
+            return h + ":" + (m < 10 ? "0" : "") + m + " " + ampm;
+          })() : "";
+          row.cells[0].textContent = name;
+          row.cells[1].textContent = phone;
+          row.cells[2].textContent = guests;
+          row.cells[3].textContent = getLocationDisplay(location);
+          row.cells[4].textContent = dateFormatted;
+          row.cells[5].textContent = timeFormatted;
+          row.setAttribute("data-guests", guests);
+          row.setAttribute("data-status", status);
+          row.setAttribute("data-date", date);
+          row.setAttribute("data-time", time);
+          row.setAttribute("data-email", form.elements["email"].value);
+          row.setAttribute("data-location", location);
+          var statusCell = row.querySelector(".admin-status-cell");
+          if (statusCell) {
+            var label = status.charAt(0).toUpperCase() + status.slice(1);
+            statusCell.innerHTML = "<span class=\"admin-status admin-status-" + status + "\">" + label + "</span>";
+          }
+          var actionsCell = row.querySelector(".admin-actions-cell");
+          if (actionsCell) {
+            var id = row.getAttribute("data-id");
+            var html = "";
+            if (status === "pending") {
+              html += "<button type=\"button\" class=\"admin-confirm-btn\" data-id=\"" + id + "\" aria-label=\"Confirm reservation\">Confirm</button>";
+            }
+            html += "<button type=\"button\" class=\"admin-edit-row-btn\" data-id=\"" + id + "\" aria-label=\"Edit reservation\">Edit</button>";
+            actionsCell.innerHTML = html;
+          }
+        }
+
+        function saveFromForm() {
+          if (!currentRow) return;
+          var id = form.elements["id"].value;
+          if (!id) return;
+          var fd = new FormData(form);
+          fd.append("csrfmiddlewaretoken", getCsrfToken());
+          fetch("/admin-dashboard/reservation/" + id + "/edit/", {
+            method: "POST",
+            body: fd,
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          }).then(function (r) {
+            if (r.ok) {
+              updateRowFromForm(currentRow);
+              if (typeof window.applyReservationFilters === "function") window.applyReservationFilters();
+              if (typeof window.sortReservationsByDate === "function") window.sortReservationsByDate();
+              if (typeof window.refreshAdminRecentBoxes === "function") window.refreshAdminRecentBoxes();
+              closeEditModal();
+            } else {
+              r.json().then(function (d) { alert(d.error || "Save failed"); });
+            }
+          }).catch(function () { alert("Save failed"); });
+        }
+
+        document.addEventListener("click", function (e) {
+          var btn = e.target.closest(".admin-edit-row-btn");
+          if (btn) {
+            var row = btn.closest("tr");
+            if (row) openEditModal(row);
+            return;
+          }
+          btn = e.target.closest(".admin-confirm-btn");
+          if (btn) {
+            var id = btn.getAttribute("data-id");
+            var row = btn.closest("tr");
+            if (!id || !row) return;
+            var fd = new FormData();
+            fd.append("csrfmiddlewaretoken", getCsrfToken());
+            fetch("/admin-dashboard/reservation/" + id + "/confirm/", {
+              method: "POST",
+              body: fd,
+              headers: { "X-Requested-With": "XMLHttpRequest" }
+            }).then(function (r) {
+              if (r.ok) {
+                row.setAttribute("data-status", "confirmed");
+                var statusCell = row.querySelector(".admin-status-cell");
+                if (statusCell) statusCell.innerHTML = "<span class=\"admin-status admin-status-confirmed\">Confirmed</span>";
+                var actionsCell = row.querySelector(".admin-actions-cell");
+                if (actionsCell) actionsCell.innerHTML = "<button type=\"button\" class=\"admin-edit-row-btn\" data-id=\"" + id + "\" aria-label=\"Edit reservation\">Edit</button>";
+                if (typeof window.refreshAdminRecentBoxes === "function") window.refreshAdminRecentBoxes();
+              }
+            }).catch(function () { alert("Confirm failed"); });
+          }
+        });
+
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            saveFromForm();
+          });
+        }
+        if (backdrop) backdrop.addEventListener("click", closeEditModal);
+        if (cancelBtn) cancelBtn.addEventListener("click", closeEditModal);
+      })();
+
+      (function () {
+        var searchInput = document.getElementById("admin-search");
+        var tbody = document.getElementById("admin-reservations-tbody");
+        if (!searchInput || !tbody) return;
+
+        var filterStatus = "";
+        var filterGuests = "";
+
+        function parseTimeToMinutes(timeStr) {
+          if (!timeStr || !timeStr.trim()) return 0;
+          var t = timeStr.trim().toLowerCase();
+          var m = t.match(/^(\d{1,2})\s*(am|pm)?$/);
+          if (!m) return 0;
+          var hour = parseInt(m[1], 10);
+          var ampm = (m[2] || "").toLowerCase();
+          if (ampm === "pm" && hour !== 12) hour += 12;
+          if (ampm === "am" && hour === 12) hour = 0;
+          return hour * 60;
+        }
+
+        function getRowSortKey(row) {
+          var dateText = (row.cells[4] && row.cells[4].textContent) || "";
+          var timeText = (row.cells[5] && row.cells[5].textContent) || "";
+          var d = dateText.trim() ? new Date(dateText.trim()) : new Date(0);
+          var ts = isNaN(d.getTime()) ? 0 : d.getTime();
+          return ts + parseTimeToMinutes(timeText);
+        }
+
+        function sortReservationsByDate() {
+          var rows = Array.from(tbody.querySelectorAll("tr"));
+          rows.sort(function (a, b) {
+            var statusA = a.getAttribute("data-status") || getRowStatus(a);
+            var statusB = b.getAttribute("data-status") || getRowStatus(b);
+            var completedA = statusA === "confirmed";
+            var completedB = statusB === "confirmed";
+            if (completedA !== completedB) return completedA ? 1 : -1;
+            return getRowSortKey(a) - getRowSortKey(b);
+          });
+          rows.forEach(function (row) {
+            tbody.appendChild(row);
+          });
+        }
+
+        sortReservationsByDate();
+
+        function getRowStatus(row) {
+          var statusCell = row.querySelector(".admin-status-cell");
+          if (!statusCell) return "";
+          var span = statusCell.querySelector(".admin-status");
+          if (!span) return "";
+          var m = span.className.match(/admin-status-(\w+)/);
+          return m ? m[1] : "";
+        }
+
+        function applyFilters() {
+          var q = (searchInput.value || "").trim().toLowerCase();
+          var rows = tbody.querySelectorAll("tr");
+          rows.forEach(function (row) {
+            var name = (row.cells[0] && row.cells[0].textContent) || "";
+            var phone = (row.cells[1] && row.cells[1].textContent) || "";
+            var rowStatus = row.getAttribute("data-status") || getRowStatus(row);
+            var guests = row.getAttribute("data-guests") || (row.cells[2] && row.cells[2].textContent) || "";
+            var searchMatch = !q || name.toLowerCase().indexOf(q) >= 0 || phone.toLowerCase().indexOf(q) >= 0;
+            var statusMatch = !filterStatus || rowStatus === filterStatus;
+            var guestsMatch = !filterGuests || (filterGuests === "4" && parseInt(guests, 10) >= 4) || guests === filterGuests;
+            row.style.display = searchMatch && statusMatch && guestsMatch ? "" : "none";
+          });
+        }
+
+        window.applyReservationFilters = applyFilters;
+        window.sortReservationsByDate = sortReservationsByDate;
+
+        searchInput.addEventListener("input", applyFilters);
+
+        document.querySelectorAll(".admin-filter-dropdown").forEach(function (wrap) {
+          var btn = wrap.querySelector(".admin-filter-btn");
+          var menu = wrap.querySelector(".admin-filter-menu");
+          var filterName = btn.getAttribute("data-filter");
+
+          function updateLabel(value, text) {
+            var label = text || btn.textContent.replace(/\s*&#9662;.*$/, "").trim();
+            if (value) label = text || value;
+            btn.innerHTML = label + " &#9662;";
+          }
+
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var isOpen = !menu.hasAttribute("hidden");
+            document.querySelectorAll(".admin-filter-menu").forEach(function (m) {
+              m.setAttribute("hidden", "");
+            });
+            document.querySelectorAll(".admin-filter-dropdown .admin-filter-btn").forEach(function (b) {
+              b.setAttribute("aria-expanded", "false");
+            });
+            if (!isOpen) {
+              menu.removeAttribute("hidden");
+              btn.setAttribute("aria-expanded", "true");
+              var rect = btn.getBoundingClientRect();
+              menu.style.position = "fixed";
+              menu.style.top = (rect.bottom + 4) + "px";
+              menu.style.left = rect.left + "px";
+            }
+          });
+
+          menu.querySelectorAll("[data-value]").forEach(function (item) {
+            item.addEventListener("click", function (e) {
+              e.stopPropagation();
+              var value = this.getAttribute("data-value");
+              if (filterName === "status") {
+                filterStatus = value;
+                updateLabel(value, value ? value.charAt(0).toUpperCase() + value.slice(1) : "Status");
+              } else if (filterName === "guests") {
+                filterGuests = value;
+                updateLabel(value, value ? (value === "4" ? "4+" : value) : "Guests");
+              }
+              menu.setAttribute("hidden", "");
+              btn.setAttribute("aria-expanded", "false");
+              applyFilters();
+            });
+          });
+        });
+
+        document.addEventListener("click", function () {
+          document.querySelectorAll(".admin-filter-menu").forEach(function (m) {
+            m.setAttribute("hidden", "");
+          });
+          document.querySelectorAll(".admin-filter-dropdown .admin-filter-btn").forEach(function (b) {
+            b.setAttribute("aria-expanded", "false");
+          });
+        });
+      })();
+
+      (function () {
+        var RECENT_POLL_INTERVAL = 5000;
+        var upcomingTbody = document.getElementById("admin-upcoming-tbody");
+        var confirmedTbody = document.getElementById("admin-recent-confirmed-tbody");
+        var pendingTbody = document.getElementById("admin-recent-pending-tbody");
+        var cancelledTbody = document.getElementById("admin-recent-cancelled-tbody");
+        if (!upcomingTbody || !confirmedTbody || !pendingTbody || !cancelledTbody) return;
+
+        function renderRow(res) {
+          var loc = (res.location_display || res.location || "").replace(/</g, "&lt;");
+          return "<tr data-id=\"" + (res.id || "") + "\">" +
+            "<td>" + (res.name || "").replace(/</g, "&lt;") + "</td>" +
+            "<td>" + (res.phone || "").replace(/</g, "&lt;") + "</td>" +
+            "<td>" + (res.guests || "") + "</td>" +
+            "<td>" + loc + "</td>" +
+            "<td>" + (res.date || "").replace(/</g, "&lt;") + "</td>" +
+            "<td><span class=\"admin-status admin-status-" + (res.status || "") + "\">" + (res.status_display || "").replace(/</g, "&lt;") + "</span></td>" +
+            "</tr>";
+        }
+
+        function renderEmpty(message) {
+          return "<tr><td colspan=\"6\" class=\"admin-recent-empty\">" + (message || "None") + "</td></tr>";
+        }
+
+        function updateBox(tbody, items, emptyMsg) {
+          if (!tbody) return;
+          if (!items || items.length === 0) {
+            tbody.innerHTML = renderEmpty(emptyMsg);
+            return;
+          }
+          tbody.innerHTML = items.map(renderRow).join("");
+        }
+
+        function fetchAndUpdate() {
+          fetch("{% url 'main:admin_reservations_recent_json' %}", {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (data) {
+              updateBox(upcomingTbody, data.upcoming, "No upcoming reservations");
+              updateBox(confirmedTbody, data.recent_confirmed, "No recent confirmed");
+              updateBox(pendingTbody, data.recent_pending, "No recent pending");
+              updateBox(cancelledTbody, data.recent_cancelled, "No recent cancelled");
+              if (data.today) {
+                var t = data.today;
+                var totalEl = document.getElementById("admin-today-total");
+                if (totalEl && typeof t.total === "number") totalEl.textContent = t.total;
+                var cEl = document.getElementById("admin-today-confirmed-count");
+                if (cEl && typeof t.confirmed === "number") cEl.textContent = t.confirmed;
+                var pEl = document.getElementById("admin-today-pending-count");
+                if (pEl && typeof t.pending === "number") pEl.textContent = t.pending;
+                var xEl = document.getElementById("admin-today-cancelled-count");
+                if (xEl && typeof t.cancelled === "number") xEl.textContent = t.cancelled;
+              }
+            })
+            .catch(function () {
+              updateBox(upcomingTbody, null, "Unable to load");
+              updateBox(confirmedTbody, null, "Unable to load");
+              updateBox(pendingTbody, null, "Unable to load");
+              updateBox(cancelledTbody, null, "Unable to load");
+            });
+        }
+
+        fetchAndUpdate();
+        setInterval(fetchAndUpdate, RECENT_POLL_INTERVAL);
+
+        window.refreshAdminRecentBoxes = fetchAndUpdate;
+      })();
+    </script>
+  </body>
+</html>

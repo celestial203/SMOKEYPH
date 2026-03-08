@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - Smokey Peeks</title>
+    <link rel="stylesheet" href="{% static 'main/css/logadmin.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <a href="{% url 'main:home' %}" class="admin-brand" aria-label="Smokey Peeks – Back to home">
+          <img
+            src="{% static 'main/img/logo no bg.png' %}"
+            alt="Smokey Peeks logo"
+            class="admin-brand-logo"
+          />
+          <span class="admin-brand-text">
+            <span class="admin-brand-name">Smokey Peeks</span>
+            <span class="admin-brand-tagline">Smoke, Sizzle, and Sip the Night Away.</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      {% if messages %}
+      <ul class="admin-messages" id="admin-messages" hidden aria-hidden="true">
+        {% for message in messages %}
+        <li class="admin-message-error" data-message="{{ message|escapejs }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="admin-login-wrapper">
+        <section class="admin-login-card" aria-labelledby="admin-login-title">
+          <h1 id="admin-login-title" class="admin-login-title">Admin Login</h1>
+          <p class="admin-login-subtitle">Sign in to manage Smokey Peeks</p>
+
+          <form class="admin-login-form" action="{% url 'main:logadmin' %}" method="post" autocomplete="on">
+            {% csrf_token %}
+            <div class="admin-form-group">
+              <label for="admin-username" class="admin-label">Username</label>
+              <input
+                type="text"
+                id="admin-username"
+                name="username"
+                class="admin-input"
+                placeholder="Enter username"
+                autocomplete="username"
+                required
+              />
+            </div>
+            <div class="admin-form-group">
+              <label for="admin-password" class="admin-label">Password</label>
+              <input
+                type="password"
+                id="admin-password"
+                name="password"
+                class="admin-input"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+            <button type="submit" class="admin-btn">Sign In</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer class="admin-footer">
+      <p class="admin-footer-text">&copy; Smokey Peeks. Admin access only.</p>
+    </footer>
+    <script>
+      (function () {
+        var list = document.getElementById("admin-messages");
+        if (!list) return;
+        var first = list.querySelector(".admin-message-error");
+        if (!first) return;
+        var text = first.getAttribute("data-message") || first.textContent || "Invalid username or password.";
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: text,
+          confirmButtonColor: "#c17a2e",
+          confirmButtonText: "OK"
+        });
+      })();
+    </script>
+  </body>
+</html>
